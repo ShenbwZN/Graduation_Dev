@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>石家庄市地下水水位风险评估</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+
+    <!-- 自定义JS -->
+    <script th:src="@{/js/myJs.js}"></script>
+
+    <!--  ECharts的JS  -->
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/myECharts.js}"></script>
+
+    <!--  select框  -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}">
+    <script th:src="@{/js/bootstrap-select.min.js}"></script>
+</head>
+<body onload="startTime()">
+
+<!-- 头部 -->
+<div th:replace="common::header"></div>
+
+<!-- 主体 -->
+<div class="container">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-4">
+                <label>搜索：
+                    <select onchange="showChart('waterDate', this.value)" class="selectpicker" data-live-search="true"
+                            data-live-search-placeholder="搜索" th:title="请选择时间">
+                        <option th:each="date:${dates}" th:value="${date}"
+                                th:text="${date}"></option>
+                    </select>
+                </label>
+            </div>
+            <div class="col-4 text-center">
+                <span id="staTitle"></span>
+            </div>
+        </div>
+
+
+        <br>
+        <div class="row">
+            <div class="col-6" id="bar_div" style="width: 600px;height: 400px;"></div>
+            <div class="col-6" id="line_div" style="width: 600px;height: 400px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<div th:replace="common::footer"></div>
+
+</body>
+</html>

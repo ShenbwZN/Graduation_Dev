@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>石家庄市地下水水位风险评估</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+
+    <!-- 自定义JS -->
+    <script th:src="@{/js/myJs.js}"></script>
+
+    <!--  ECharts的JS  -->
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/myECharts.js}"></script>
+
+    <script>
+        showChart("waterValue", [[${staCode}]]);
+    </script>
+
+
+</head>
+<body onload="startTime()">
+
+<!-- 头部 -->
+<div th:replace="common::header"></div>
+
+<div class="container text-center">
+    <h3>详细信息</h3>
+</div>
+<!-- 主体 -->
+<div class="container">
+    <div class="row">
+        <div class="col-6" id="bar_div" style="width: 600px;height: 400px;"></div>
+        <div class="col-6" id="line_div" style="width: 600px;height: 400px;"></div>
+    </div>
+</div>
+
+
+<!-- footer -->
+<div th:replace="common::footer"></div>
+
+
+</body>
+
+
+</html>

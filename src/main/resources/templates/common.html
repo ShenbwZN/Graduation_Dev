@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Common</title>
+</head>
+<body>
+
+<!-- 头部 -->
+<div class="container navbar-light bg-light" th:fragment="header">
+    <!-- 功能区 -->
+    <div class="row navbar-dark bg-dark">
+        <div class="col-8">
+            <nav class="navbar navbar-expand-sm">
+                <!-- Logo -->
+                <a class="navbar-brand" href="#">
+                    <img th:src="@{/images/Logo.jpg}" src="images/Logo.jpg" alt="Logo" style="width: 30px;"/>
+                </a>
+
+                <!-- 目录导航 -->
+                <ul class="navbar-nav ">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/main}">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">风险度计算</a>
+                    </li>
+                    <!-- 折叠 -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                            数据可视化
+                        </a>
+                        <div class="dropdown-menu">
+                            <span class="dropdown-header">可视化</span>
+                            <a class="dropdown-item" th:href="@{/byStation}">按监测站</a>
+                            <a class="dropdown-item" th:href="@{/byDate}">按日期</a>
+                            <a class="dropdown-item" href="#">按风险等级</a>
+                            <div class="dropdown-divider"></div>
+                        </div>
+                    </li>
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link" th:href="@{/search}">查询</a>-->
+                    <!--                    </li>-->
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 消息区 -->
+        <div class="col-4">
+            <nav class="navbar navbar-expand-sm justify-content-end">
+                <!-- 时间文本-->
+                <span class="navbar-text" id="txt_date"> 当前时间 </span>&nbsp;&nbsp;
+                <ul class="navbar-nav ">
+                    <!-- 个人消息-折叠 -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                            [[${session.loginUser.username}]]
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <span class="dropdown-header" th:text="${session.loginUser.username}">欢迎您</span>
+                            <a class="dropdown-item" href="#">个人信息</a>
+                            <a class="dropdown-item" th:href="@{/logout}">退出</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+<!-- footer -->
+<div class="container bg-light" th:fragment="footer">
+    <div class="text-center">
+        <p>Copyright © ShenBowen, All Rights Reserved.</p>
+        <p>石家庄市地下水水位风险评估</p>
+    </div>
+</div>
+
+
+</body>
+</html>

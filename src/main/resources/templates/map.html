@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>石家庄市地下水水位风险评估</title>
+    <link rel="stylesheet" th:href="@{/css/myMap.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div id="container_map"></div>
+<div class="info">
+    <span class="info2">石家庄市地下水水位风险评估</span><br>
+</div>
+
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=056b5219930c24f1acb5f9eb02fcdad4&plugin=AMap.DistrictSearch"></script>
+
+<script type="text/javascript">
+    find();
+
+    // /villages:请求获取数据
+    function find() {
+        $.ajax("/stations", {
+            dataType: "json",
+            type: "post",
+            contentType: "application/json",
+            async: true,
+            success: function (data) {
+                // 显示地图数据
+                showMap(data);
+            },
+            error: function () {
+                alert("数据发送失败");
+            }
+        });
+    }
+
+    function showMap(data) {
+        // 方法1，添加图层
+        // var layerRoadNet = new AMap.TileLayer.RoadNet();
+        // var layerSatellite = new AMap.TileLayer.Satellite();
+        var map = new AMap.Map("container_map", {
+            resizeEnable: true,
+            center: [114.477822, 38.133184],
+            zoom: 9,
+            // 方法2 添加图层
+            layers: [new AMap.TileLayer.Satellite()],
+            // pitch: 0,
+            viewMode: '3D'
+            // mapStyle: "amap://styles/light"
+        });
+        map.clearMap();
+        // map.setLayers([layerSatellite]);
+        // 点的点击事件
+        var markerClick = function (e) {
+            infoWindow.setContent(e.target.content);
+            infoWindow.open(map, e.target.getPosition());
+        };
+        var infoWindow = new AMap.InfoWindow({
+            // isCustom:true, // 这个打开，是要自己设置显示格式的
+            offset: new AMap.Pixel(-10, -31)
+        });
+
+        // 循环创建所有点
+        for (var i = 0; i < data.length; i++) {
+            var marker = new AMap.Marker({
+                map: map,
+                position: [data[i].stationLon, data[i].stationLat],
+                title: data[i].stationName,
+                offset: new AMap.Pixel(-10, -31),
+            });
+
+            // 设置点的内容
+            var content = [];
+            content.push("监测站：" + data[i].stationName);
+            content.push("监测站编码：" + data[i].stationCode);
+            content.push("监测站位置：" + data[i].stationLocation);
+            content.push("<a target='_blank' href='details?staCode=" + data[i].stationCode + "'>详情</a>");
+            // 设置点的点击显示内容
+            marker.content = content.join("<br/>");
+            marker.on('click', markerClick);
+        }
+
+        draw(map);
+
+    }
+
+    function draw(map) {
+        var opts = {
+            subdistrict: 0,   //获取边界不需要返回下级行政区
+            extensions: 'all',  //返回行政区边界坐标组等具体信息
+            level: 'district'
+        };
+        var district = new AMap.DistrictSearch(opts);
+        district.search("石家庄市", function (status, result) {
+            // map.remove(polygons)
+            var polygons = [];
+            var bounds = result.districtList[0].boundaries;
+            var outer = [
+                new AMap.LngLat(-360, 90, true),
+                new AMap.LngLat(-360, -90, true),
+                new AMap.LngLat(360, -90, true),
+                new AMap.LngLat(360, 90, true),
+            ];
+            var pathArray = [outer];
+            pathArray.push.apply(pathArray, bounds);
+
+            if (bounds) {
+                for (var i = 0, l = bounds.length; i < l; i++) {
+                    //生成行政区划polygon
+                    var polygon = new AMap.Polygon({
+                        path: pathArray,
+                        strokeWeight: 1,
+                        // path: bounds[i],
+                        fillOpacity: 0.8,
+                        fillColor: '#000000',
+                        // strokeColor: '#0091ea'
+                    });
+                    polygons.push(polygon);
+                }
+            }
+            map.add(polygons);
+        });
+    }
+
+</script>
+
+</body>
+</html>

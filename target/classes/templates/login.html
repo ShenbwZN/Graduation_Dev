@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title> 欢迎登录：石家庄市地下水水位风险评估</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+
+
+    <!-- 自定义JS -->
+    <script th:src="@{/js/myJs.js}"></script>
+
+    <style>
+        .overall {
+            background-color: #F0F2F5;
+            /* text-align: center; */
+            margin-top: 10%;
+            width: 50%;
+            margin-left: 25%;
+            position: relative;
+            margin-bottom: 15%;
+        }
+    </style>
+</head>
+
+<body>
+<div class="overall">
+    <div class="container card bg-light text-muted">
+        <div class="card-body">
+            <div class="text-center">
+                <h2>石家庄市地下水水位风险评估</h2>
+            </div>
+            <br>
+            <!-- 胶囊选项卡切换:nav-pills,居中对齐:justify-content-center,等宽:nav-justified -->
+            <ul class="nav nav-pills justify-content-center nav-justified" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#p_login">密码登录</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#v_login">验证码登录</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#r_login">注册登录</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!--邮箱密码登录-->
+                <div id="p_login" class="container tab-pane active"><br>
+                    <form method="POST" th:action="@{/login}" onsubmit="return verifyPassword()">
+                        <div class="form-group">
+                            <label for="p_email">邮箱：</label>
+                            <input type="email" class="form-control" name="email" id="p_email"
+                                   placeholder="请输入邮箱..." required="required" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label for="p_password">密码：</label>
+                            <input type="password" class="form-control" name="password" id="p_password"
+                                   placeholder="请输入密码..." required="required">
+                        </div>
+                        <div class="text-center">
+                            <label style="color: red" th:text="${msg}"></label>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">登录</button>
+                    </form>
+                </div>
+
+                <!--邮箱验证码登录-->
+                <div id="v_login" class="container tab-pane fade"><br>
+                    <form method="POST" th:action="@{/loginCode}" name="f_email" onsubmit="return verifyMyCode()">
+                        <div class="form-group">
+                            <label for="v_email">邮箱：</label>
+                            <input type="email" class="form-control" name="email" placeholder="请输入邮箱..."
+                                   required="required" id="v_email">
+                        </div>
+                        <!-- 验证码 -->
+                        <div class="form-group">
+                            <label for="v_code">验证码：</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="verifyCode" id="v_code"
+                                       placeholder="请输入6位数字验证码..." required="required">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary"
+                                            onclick="sendEmail(this, 'v_email')">获取验证码
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <label style="color: red" th:text="${msg}"></label>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">登录</button>
+                    </form>
+                </div>
+
+                <!--注册-->
+                <div id="r_login" class="container tab-pane fade"><br>
+                    <form method="POST" th:action="@{/register}" onsubmit="return verifyRegister()">
+                        <div class="form-group">
+                            <label for="r_email">邮箱：</label>
+                            <input type="email" class="form-control" name="email" placeholder="请输入邮箱..."
+                                   id="r_email" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="r_username">用户名：</label>
+                            <input type="text" class="form-control" id="r_username" name="username"
+                                   placeholder="请输入2-8字符：中英文、数字、下划线..." required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="r_password">密码：</label>
+                            <input type="password" class="form-control" name="password"
+                                   id="r_password" placeholder="6-12字符：字母（开头），数字，下划线" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="r_pwd">确认密码：</label>
+                            <input type="password" class="form-control" name="pwd" placeholder="再次输入密码..."
+                                   id="r_pwd" required="required">
+                        </div>
+                        <div class="text-center">
+                            <label style="color: red" th:text="${msg}"></label>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">注册</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!--模态框 + footer-->
+        <div class="text-center">
+            <p><a href="#" class="card-link" data-toggle="modal" data-target="#myModal">哎呀 ！！！忘记密码了</a></p>
+            <p>Copyright © ShenBowen, All Rights Reserved.</p>
+            <p>石家庄市地下水水位风险评估</p>
+        </div>
+
+        <!-- 模态框，子窗口 -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- modal-header 是为模态窗口的头部定义样式的类。 -->
+                    <div class="modal-header">
+                        <!-- 关闭按钮 class="close" data-dismiss="modal" -->
+                        <h4 class="modal-title" id="myModalLabel"> 密码重置 </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> x</button>
+                    </div>
+                    <div class="modal-body card">
+                        <div class="card-body">
+                            <form method="POST" th:action="@{/update}" onsubmit="return verifyModel()">
+                                <input type="hidden" name="_method" value="put">
+                                <div class="form-group">
+                                    <label for="m_email">邮箱：</label>
+                                    <input type="email" class="form-control" name="email" id="m_email"
+                                           placeholder="请输入邮箱..." autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <label for="m_password">新密码：</label>
+                                    <input type="password" class="form-control" name="password"
+                                           id="m_password" placeholder="6-12字符：字母（开头），数字，下划线">
+                                </div>
+                                <!-- 验证码 -->
+                                <div class="form-group">
+                                    <label for="m_code">验证码：</label>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="verifyCode"
+                                               id="m_code" placeholder="请输入6位数字验证码..." required="required">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-primary"
+                                                    onclick="sendEmail(this, 'm_email')">获取验证码
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">重置密码</button>
+                            </form>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+
+    </div>
+</div>
+
+
+</body>
+
+</html>

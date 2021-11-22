@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>石家庄市地下水水位风险评估</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+
+    <!-- 自定义JS -->
+    <script th:src="@{/js/myJs.js}"></script>
+
+    <!--  ECharts的JS  -->
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <script th:src="@{/js/myECharts.js}"></script>
+
+    <!--  select框  -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}">
+    <script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+    <!--  Map相关的JS CSS -->
+    <link th:href="@{/css/myMap.css}" rel="stylesheet">
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=056b5219930c24f1acb5f9eb02fcdad4&plugin=AMap.DistrictSearch"></script>
+    <script th:src="@{/js/myMap.js}"></script>
+
+
+</head>
+
+<body onload="startTime()">
+
+<!-- 头部 -->
+<div th:replace="common::header"></div>
+
+
+<!-- Map -->
+<div id="container_map" class="container"></div>
+<!-- 主页标题 -->
+<div class="mainInfo">
+    <span class="infoTitle">石家庄市地下水水位风险评估</span>
+</div>
+
+<!-- footer -->
+<div th:replace="common::footer"></div>
+
+<script>
+    loadMainMap();
+</script>
+
+</body>
+
+
+</html>
